@@ -16,6 +16,7 @@
 package com.github.jmnarloch.spring.request.correletion.filter;
 
 import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelation;
+import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelationInterceptor;
 import com.github.jmnarloch.spring.request.correletion.api.RequestIdGenerator;
 import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationConsts;
 import org.apache.commons.lang3.StringUtils;
@@ -47,15 +48,24 @@ public class RequestCorrelationFilter implements Filter {
     private final RequestIdGenerator requestIdGenerator;
 
     /**
+     * List of optional interceptors.
+     */
+    private final List<RequestCorrelationInterceptor> interceptors;
+
+    /**
      * Creates new instance of {@link RequestIdGenerator} class.
      *
      * @param requestIdGenerator the request id generator
-     * @throws IllegalArgumentException if any error occurs
+     * @param interceptors       the correlation interceptors
+     * @throws IllegalArgumentException if {@code requestIdGenerator} is {@code null}
+     *                                  or {@code interceptors} is {@code null}
      */
-    public RequestCorrelationFilter(RequestIdGenerator requestIdGenerator) {
+    public RequestCorrelationFilter(RequestIdGenerator requestIdGenerator, List<RequestCorrelationInterceptor> interceptors) {
         Assert.notNull(requestIdGenerator, "Parameter 'correlationIdGenerator' can not be null.");
+        Assert.notNull(interceptors, "Parameter 'interceptors' can not be null.");
 
         this.requestIdGenerator = requestIdGenerator;
+        this.interceptors = interceptors;
     }
 
     /**
@@ -108,6 +118,9 @@ public class RequestCorrelationFilter implements Filter {
             logger.debug("Request correlation id was not present, generating new one: {}", correlationId);
         }
 
+        // triggers interceptors
+        triggerInterceptors(correlationId);
+
         // instantiates new request correlation
         final RequestCorrelation requestCorrelation = new DefaultRequestCorrelation(correlationId);
 
@@ -137,6 +150,18 @@ public class RequestCorrelationFilter implements Filter {
     private String generateCorrelationId() {
 
         return requestIdGenerator.generate();
+    }
+
+    /**
+     * Triggers the configured interceptors.
+     *
+     * @param correlationId the correlation id
+     */
+    private void triggerInterceptors(String correlationId) {
+
+        for (RequestCorrelationInterceptor interceptor : interceptors) {
+            interceptor.afterRequestIdSet(correlationId);
+        }
     }
 
     /**

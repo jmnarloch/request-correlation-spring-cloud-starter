@@ -15,9 +15,11 @@
  */
 package com.github.jmnarloch.spring.request.correletion.support;
 
+import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelationInterceptor;
 import com.github.jmnarloch.spring.request.correletion.api.RequestIdGenerator;
 import com.github.jmnarloch.spring.request.correletion.filter.RequestCorrelationFilter;
 import com.github.jmnarloch.spring.request.correletion.generator.UuidIdGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +27,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
 import javax.servlet.DispatcherType;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Configures the request correlation filter.
@@ -36,6 +40,9 @@ import java.util.EnumSet;
 @Configuration
 public class RequestCorrelationConfiguration {
 
+    @Autowired(required = false)
+    private List<RequestCorrelationInterceptor> interceptors = new ArrayList<>();
+
     @Bean
     @ConditionalOnMissingBean(RequestIdGenerator.class)
     public RequestIdGenerator requestIdGenerator() {
@@ -45,7 +52,7 @@ public class RequestCorrelationConfiguration {
     @Bean
     public RequestCorrelationFilter requestCorrelationFilter(RequestIdGenerator generator) {
 
-        return new RequestCorrelationFilter(generator);
+        return new RequestCorrelationFilter(generator, interceptors);
     }
 
     @Bean

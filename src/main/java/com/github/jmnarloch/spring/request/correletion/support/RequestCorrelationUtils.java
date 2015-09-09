@@ -20,10 +20,17 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 /**
+ * A utility class for retrieving the currently bound request correlation id.
  *
+ * @author Jakub Narloch
  */
 public class RequestCorrelationUtils {
 
+    /**
+     * Retrieves the current request correlation id if present.
+     *
+     * @return the correlation id or {@code null}
+     */
     @SuppressWarnings("unchecked")
     public static String getCurrentCorrelationId() {
 
