@@ -21,7 +21,9 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 
 /**
+ * Feign request correlation interceptor.
  *
+ * @author Jakub Narloch
  */
 public class FeignCorrelationInterceptor implements RequestInterceptor {
 

@@ -15,12 +15,8 @@
  */
 package com.github.jmnarloch.spring.request.correletion.client;
 
-import com.github.jmnarloch.spring.request.correletion.filter.RequestCorrelationFilter;
-import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationAutoConfiguration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,13 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Configures any {@link org.springframework.web.client.RestTemplate} bean by adding additional request interceptor.
  *
+ * @author Jakub Narloch
  */
 @Configuration
 @ConditionalOnClass(InterceptingHttpAccessor.class)
-@ConditionalOnBean({RequestCorrelationFilter.class, InterceptingHttpAccessor.class})
-@AutoConfigureAfter(RequestCorrelationAutoConfiguration.class)
-public class RestTemplateCorrelationAutoConfiguration {
+public class RestTemplateCorrelationConfiguration {
 
     @Autowired(required = false)
     private List<InterceptingHttpAccessor> clients = new ArrayList<>();

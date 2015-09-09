@@ -15,24 +15,20 @@
  */
 package com.github.jmnarloch.spring.request.correletion.feign;
 
-import com.github.jmnarloch.spring.request.correletion.filter.RequestCorrelationFilter;
-import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationAutoConfiguration;
 import feign.Feign;
 import feign.RequestInterceptor;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * Adds Feign's {@link RequestInterceptor} for propagating the correlation id.
  *
+ * @author Jakub Narloch
  */
 @Configuration
 @ConditionalOnClass(Feign.class)
-@ConditionalOnBean(RequestCorrelationFilter.class)
-@AutoConfigureAfter(RequestCorrelationAutoConfiguration.class)
-public class FeignCorrelationAutoConfiguration {
+public class FeignCorrelationConfiguration {
 
     @Bean
     public RequestInterceptor feignCorrelationInterceptor() {

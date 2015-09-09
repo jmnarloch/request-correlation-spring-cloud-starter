@@ -17,6 +17,8 @@ package com.github.jmnarloch.spring.request.correletion.support;
 
 import com.github.jmnarloch.spring.request.correletion.api.RequestIdGenerator;
 import com.github.jmnarloch.spring.request.correletion.filter.RequestCorrelationFilter;
+import com.github.jmnarloch.spring.request.correletion.generator.UuidIdGenerator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,10 +28,19 @@ import javax.servlet.DispatcherType;
 import java.util.EnumSet;
 
 /**
+ * Configures the request correlation filter.
  *
+ * @author Jakub Narloch
+ * @see com.github.jmnarloch.spring.request.correletion.api.EnableRequestCorrelation
  */
 @Configuration
-public class RequestCorrelationAutoConfiguration {
+public class RequestCorrelationConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean(RequestIdGenerator.class)
+    public RequestIdGenerator requestIdGenerator() {
+        return new UuidIdGenerator();
+    }
 
     @Bean
     public RequestCorrelationFilter requestCorrelationFilter(RequestIdGenerator generator) {
@@ -43,7 +54,8 @@ public class RequestCorrelationAutoConfiguration {
         final FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
         filterRegistration.setFilter(correlationFilter);
         filterRegistration.setMatchAfter(false);
-        filterRegistration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
+        filterRegistration.setDispatcherTypes(
+                EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC));
         filterRegistration.setAsyncSupported(true);
         filterRegistration.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return filterRegistration;

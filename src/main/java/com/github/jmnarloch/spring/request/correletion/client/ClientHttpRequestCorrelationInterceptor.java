@@ -25,7 +25,10 @@ import org.springframework.http.client.ClientHttpResponse;
 import java.io.IOException;
 
 /**
+ * Rest template http interceptor, that propagates the currents thread bound request identifier to the outgoing request,
+ * through 'X-Request-Id' header.
  *
+ * @author Jakub Narloch
  */
 public class ClientHttpRequestCorrelationInterceptor implements ClientHttpRequestInterceptor {
 

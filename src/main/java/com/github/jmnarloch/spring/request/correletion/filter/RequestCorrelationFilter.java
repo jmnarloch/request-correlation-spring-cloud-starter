@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2015 the original author or authors
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,8 +15,8 @@
  */
 package com.github.jmnarloch.spring.request.correletion.filter;
 
-import com.github.jmnarloch.spring.request.correletion.api.RequestIdGenerator;
 import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelation;
+import com.github.jmnarloch.spring.request.correletion.api.RequestIdGenerator;
 import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationConsts;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -36,10 +36,22 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class RequestCorrelationFilter implements Filter {
 
+    /**
+     * Logger instance used by this class.
+     */
     private final Logger logger = LoggerFactory.getLogger(RequestCorrelationFilter.class);
 
+    /**
+     * The request generator used for generating new identifiers.
+     */
     private final RequestIdGenerator requestIdGenerator;
 
+    /**
+     * Creates new instance of {@link RequestIdGenerator} class.
+     *
+     * @param requestIdGenerator the request id generator
+     * @throws IllegalArgumentException if any error occurs
+     */
     public RequestCorrelationFilter(RequestIdGenerator requestIdGenerator) {
         Assert.notNull(requestIdGenerator, "Parameter 'correlationIdGenerator' can not be null.");
 
@@ -68,15 +80,23 @@ public class RequestCorrelationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        if(request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
-
+        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
             doHttpFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
+        } else {
+            // otherwise just pass through
+            chain.doFilter(request, response);
         }
-
-        // otherwise just pass through
-        chain.doFilter(request, response);
     }
 
+    /**
+     * Performs 'enrichment' of incoming HTTP request.
+     *
+     * @param request  the http servlet request
+     * @param response the http servlet response
+     * @param chain    the filter processing chain
+     * @throws IOException      if any error occurs
+     * @throws ServletException if any error occurs
+     */
     private void doHttpFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         // retrieves the correlationId
@@ -84,8 +104,8 @@ public class RequestCorrelationFilter implements Filter {
 
         // verifies the correlation id was set
         if (StringUtils.isBlank(correlationId)) {
-
             correlationId = generateCorrelationId();
+            logger.debug("Request correlation id was not present, generating new one: {}", correlationId);
         }
 
         // instantiates new request correlation
@@ -98,19 +118,34 @@ public class RequestCorrelationFilter implements Filter {
         chain.doFilter(req, response);
     }
 
-    private String getCorrelationId(ServletRequest request) {
-        if (request instanceof HttpServletRequest) {
-            return ((HttpServletRequest) request).getHeader(RequestCorrelationConsts.HEADER_NAME);
-        }
+    /**
+     * Retrieves the correlation id from the request, if present.
+     *
+     * @param request the http servlet request
+     * @return the correlation id
+     */
+    private String getCorrelationId(HttpServletRequest request) {
 
-        return null;
+        return request.getHeader(RequestCorrelationConsts.HEADER_NAME);
     }
 
+    /**
+     * Generates new correlation id.
+     *
+     * @return the correlation id
+     */
     private String generateCorrelationId() {
 
         return requestIdGenerator.generate();
     }
 
+    /**
+     * "Enriches" the request.
+     *
+     * @param request       the http servlet request
+     * @param correlationId the correlation id
+     * @return the servlet request
+     */
     private ServletRequest enrichRequest(HttpServletRequest request, RequestCorrelation correlationId) {
 
         final CorrelatedServletRequest req = new CorrelatedServletRequest(request);
@@ -119,6 +154,11 @@ public class RequestCorrelationFilter implements Filter {
         return req;
     }
 
+    /**
+     * An http servlet wrapper that allows to register additional HTTP headers.
+     *
+     * @author Jakub Narloch
+     */
     private static class CorrelatedServletRequest extends HttpServletRequestWrapper {
 
         /**
@@ -136,6 +176,12 @@ public class RequestCorrelationFilter implements Filter {
             super(request);
         }
 
+        /**
+         * Sets the header value.
+         *
+         * @param key   the header name
+         * @param value the header value
+         */
         public void setHeader(String key, String value) {
 
             this.additionalHeaders.put(key, value);
@@ -143,7 +189,7 @@ public class RequestCorrelationFilter implements Filter {
 
         @Override
         public String getHeader(String name) {
-            if(additionalHeaders.containsKey(name)) {
+            if (additionalHeaders.containsKey(name)) {
                 return additionalHeaders.get(name);
             }
             return super.getHeader(name);
@@ -153,17 +199,18 @@ public class RequestCorrelationFilter implements Filter {
         public Enumeration<String> getHeaders(String name) {
 
             final List<String> values = new ArrayList<>();
-            if(additionalHeaders.containsKey(name)) {
+            if (additionalHeaders.containsKey(name)) {
                 values.add(additionalHeaders.get(name));
+            } else {
+                values.addAll(Collections.list(super.getHeaders(name)));
             }
-            values.addAll(Collections.list(super.getHeaders(name)));
             return Collections.enumeration(values);
         }
 
         @Override
         public Enumeration<String> getHeaderNames() {
 
-            final List<String> names = new ArrayList<>();
+            final Set<String> names = new HashSet<>();
             names.addAll(additionalHeaders.keySet());
             names.addAll(Collections.list(super.getHeaderNames()));
             return Collections.enumeration(names);

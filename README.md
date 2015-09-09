@@ -6,7 +6,7 @@
 
 ## Features
 
-Allows to unique identify and track your request by passing `X-Request-Id` header across remote calls.  
+Allows to uniquely identify and track your request by passing `X-Request-Id` header across remote calls.  
 
 ## Setup
 
@@ -22,7 +22,7 @@ Add the Spring Cloud starter to your project:
 
 ## Usage
 
-Annotate every Spring Boot / Cloud Application with `@EnableRequestCorrelation` annotation and that's it.
+Annotate every Spring Boot / Cloud Application with `@EnableRequestCorrelation` annotation. That's it.
 
 ```java
 @EnableRequestCorrelation
@@ -34,6 +34,11 @@ public class Application {
 
 ## How it works?
 
+## Propagation
+
+## Retrieving the request identifier
+
+## Extensions
 
 ## License
 

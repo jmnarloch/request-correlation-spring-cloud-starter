@@ -13,19 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.api;
+package com.github.jmnarloch.spring.request.correletion.filter;
 
 /**
- * Request id generation abstraction, allows to implement different strategies for request generation.
+ * Tests the {@link RequestCorrelationFilter} class.
  *
  * @author Jakub Narloch
  */
-public interface RequestIdGenerator {
+public class RequestCorrelationFilterTest {
 
-    /**
-     * Generates the request id.
-     *
-     * @return generated the request id
-     */
-    String generate();
 }

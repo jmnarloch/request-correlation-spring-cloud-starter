@@ -16,16 +16,17 @@
 package com.github.jmnarloch.spring.request.correletion.api;
 
 /**
- * Request id generation abstraction, allows to implement different strategies for request generation.
+ * An interceptor that can be used for
  *
  * @author Jakub Narloch
  */
-public interface RequestIdGenerator {
+public interface RequestCorrelationInterceptor {
 
     /**
-     * Generates the request id.
+     * Callback method called whenever the correlation id has been assigned for the current request, no matter whether
+     * it has set from the request header value or a new id has generated for incoming request.
      *
-     * @return generated the request id
+     * @param requestId the request id
      */
-    String generate();
+    void afterRequestIdSet(String requestId);
 }

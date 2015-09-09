@@ -16,7 +16,9 @@
 package com.github.jmnarloch.spring.request.correletion.api;
 
 /**
+ * Holder for the request correlation id.
  *
+ * @author Jakub Narloch
  */
 public interface RequestCorrelation {
 
