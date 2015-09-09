@@ -1,0 +1,59 @@
+/**
+ * Copyright (c) 2015 the original author or authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.github.jmnarloch.spring.request.correletion.support;
+
+import com.github.jmnarloch.spring.request.correletion.api.EnableRequestCorrelation;
+import com.github.jmnarloch.spring.request.correletion.api.RequestIdGenerator;
+import com.github.jmnarloch.spring.request.correletion.generator.UuidIdGenerator;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.type.AnnotationMetadata;
+
+import java.util.Map;
+
+/**
+ *
+ */
+public class RequestCorrelationConfigurationRegistrar implements ImportBeanDefinitionRegistrar {
+
+    private static final String DEFAULT_GENERATOR = UuidIdGenerator.class.getName();
+
+    private static final String ANNOTATION_CLASS = EnableRequestCorrelation.class.getName();
+
+    private static final String GENERATOR_ATTRIBUTE = "value";
+
+    private static final String DEFAULT_GENERATOR_VALUE = RequestIdGenerator.class.getName();
+
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+
+
+        final Map<String, Object> attr = importingClassMetadata.getAnnotationAttributes(ANNOTATION_CLASS, true);
+        String generatorClass = (String)attr.get(GENERATOR_ATTRIBUTE);
+        if(StringUtils.equals(generatorClass, DEFAULT_GENERATOR_VALUE)) {
+            generatorClass = DEFAULT_GENERATOR;
+        }
+        registerBean(registry, generatorClass);
+    }
+
+    private void registerBean(BeanDefinitionRegistry registry, String beanClass) {
+
+        final BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClass);
+        registry.registerBeanDefinition(beanClass, builder.getBeanDefinition());
+    }
+}

@@ -1,0 +1,14 @@
+ext {
+
+    libraries = [
+
+            springBootWeb:     'org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE',
+            springCloudFeign:  'org.springframework.cloud:spring-cloud-starter-feign:1.0.3.RELEASE',
+            commonsLang:       'org.apache.commons:commons-lang3:3.4',
+
+            springBootTest: 'org.springframework.boot:spring-boot-starter-test:1.2.5.RELEASE',
+
+            junit        : 'junit:junit:4.12',
+            mockito      : 'org.mockito:mockito-all:1.10.19'
+    ]
+}
