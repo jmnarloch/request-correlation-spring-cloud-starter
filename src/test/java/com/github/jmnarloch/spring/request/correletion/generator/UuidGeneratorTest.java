@@ -13,19 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.api;
+package com.github.jmnarloch.spring.request.correletion.generator;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
- * Request id generation abstraction, allows to implement different strategies for request generation.
+ * Tests the {@link UuidGenerator} class.
  *
  * @author Jakub Narloch
  */
-public interface RequestIdGenerator {
+public class UuidGeneratorTest {
 
-    /**
-     * Generates the request id.
-     *
-     * @return generated the request id
-     */
-    String generate();
+    @Test
+    public void shouldGenerateId() {
+
+        // when
+        final String requestId = new UuidGenerator().generate();
+
+        // then
+        assertNotNull(requestId);
+    }
+
 }

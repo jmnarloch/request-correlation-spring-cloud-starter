@@ -17,7 +17,7 @@ package com.github.jmnarloch.spring.request.correletion.filter;
 
 import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelation;
 import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelationInterceptor;
-import com.github.jmnarloch.spring.request.correletion.api.RequestIdGenerator;
+import com.github.jmnarloch.spring.request.correletion.api.CorrelationIdGenerator;
 import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationConsts;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class RequestCorrelationFilter implements Filter {
     /**
      * The request generator used for generating new identifiers.
      */
-    private final RequestIdGenerator requestIdGenerator;
+    private final CorrelationIdGenerator correlationIdGenerator;
 
     /**
      * List of optional interceptors.
@@ -53,18 +53,18 @@ public class RequestCorrelationFilter implements Filter {
     private final List<RequestCorrelationInterceptor> interceptors;
 
     /**
-     * Creates new instance of {@link RequestIdGenerator} class.
+     * Creates new instance of {@link CorrelationIdGenerator} class.
      *
-     * @param requestIdGenerator the request id generator
+     * @param correlationIdGenerator the request id generator
      * @param interceptors       the correlation interceptors
      * @throws IllegalArgumentException if {@code requestIdGenerator} is {@code null}
      *                                  or {@code interceptors} is {@code null}
      */
-    public RequestCorrelationFilter(RequestIdGenerator requestIdGenerator, List<RequestCorrelationInterceptor> interceptors) {
-        Assert.notNull(requestIdGenerator, "Parameter 'correlationIdGenerator' can not be null.");
+    public RequestCorrelationFilter(CorrelationIdGenerator correlationIdGenerator, List<RequestCorrelationInterceptor> interceptors) {
+        Assert.notNull(correlationIdGenerator, "Parameter 'correlationIdGenerator' can not be null.");
         Assert.notNull(interceptors, "Parameter 'interceptors' can not be null.");
 
-        this.requestIdGenerator = requestIdGenerator;
+        this.correlationIdGenerator = correlationIdGenerator;
         this.interceptors = interceptors;
     }
 
@@ -149,7 +149,7 @@ public class RequestCorrelationFilter implements Filter {
      */
     private String generateCorrelationId() {
 
-        return requestIdGenerator.generate();
+        return correlationIdGenerator.generate();
     }
 
     /**
@@ -160,7 +160,7 @@ public class RequestCorrelationFilter implements Filter {
     private void triggerInterceptors(String correlationId) {
 
         for (RequestCorrelationInterceptor interceptor : interceptors) {
-            interceptor.afterRequestIdSet(correlationId);
+            interceptor.afterCorrelationIdSet(correlationId);
         }
     }
 

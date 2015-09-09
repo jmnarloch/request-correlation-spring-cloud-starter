@@ -34,7 +34,7 @@ import java.lang.annotation.*;
  * @author Jakub Narloch
  * @see RequestCorrelation
  * @see RequestCorrelationConfiguration
- * @see RequestIdGenerator
+ * @see CorrelationIdGenerator
  */
 @Documented
 @Inherited

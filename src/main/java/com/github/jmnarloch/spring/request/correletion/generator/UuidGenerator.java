@@ -15,25 +15,25 @@
  */
 package com.github.jmnarloch.spring.request.correletion.generator;
 
-import org.junit.Test;
+import com.github.jmnarloch.spring.request.correletion.api.CorrelationIdGenerator;
 
-import static org.junit.Assert.assertNotNull;
+import java.util.UUID;
 
 /**
- * Tests the {@link UuidIdGenerator} class.
+ * Uses {@link UUID#randomUUID()} for generating new requests ids.
  *
  * @author Jakub Narloch
  */
-public class UuidIdGeneratorTest {
+public class UuidGenerator implements CorrelationIdGenerator {
 
-    @Test
-    public void shouldGenerateId() {
+    /**
+     * Generates new request id as random UUID.
+     *
+     * @return random uuid
+     */
+    @Override
+    public String generate() {
 
-        // when
-        final String requestId = new UuidIdGenerator().generate();
-
-        // then
-        assertNotNull(requestId);
+        return UUID.randomUUID().toString();
     }
-
 }

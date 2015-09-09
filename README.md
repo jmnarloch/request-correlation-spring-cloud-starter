@@ -62,7 +62,7 @@ For instance you can apply this information to your logging MDC map. You can ach
 public RequestCorrelationInterceptor correlationLoggingInterceptor() {
     return new RequestCorrelationInterceptor() {
         @Override
-        public void afterRequestIdSet(String correlationId) {
+        public void afterCorrelationIdSet(String correlationId) {
             MDC.put("correlationId", correlationId);
         }
     };

@@ -28,5 +28,5 @@ public interface RequestCorrelationInterceptor {
      *
      * @param correlationId the correlation id
      */
-    void afterRequestIdSet(String correlationId);
+    void afterCorrelationIdSet(String correlationId);
 }
