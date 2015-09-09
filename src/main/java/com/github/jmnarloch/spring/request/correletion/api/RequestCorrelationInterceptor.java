@@ -26,7 +26,7 @@ public interface RequestCorrelationInterceptor {
      * Callback method called whenever the correlation id has been assigned for the current request, no matter whether
      * it has set from the request header value or a new id has generated for incoming request.
      *
-     * @param requestId the request id
+     * @param correlationId the correlation id
      */
-    void afterRequestIdSet(String requestId);
+    void afterRequestIdSet(String correlationId);
 }
