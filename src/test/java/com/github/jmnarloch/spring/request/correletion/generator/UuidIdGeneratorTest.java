@@ -15,11 +15,25 @@
  */
 package com.github.jmnarloch.spring.request.correletion.generator;
 
+import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Tests the {@link UuidIdGenerator} class.
  *
  * @author Jakub Narloch
  */
 public class UuidIdGeneratorTest {
+
+    @Test
+    public void shouldGenerateId() {
+
+        // when
+        final String requestId = new UuidIdGenerator().generate();
+
+        // then
+        assertNotNull(requestId);
+    }
 
 }
