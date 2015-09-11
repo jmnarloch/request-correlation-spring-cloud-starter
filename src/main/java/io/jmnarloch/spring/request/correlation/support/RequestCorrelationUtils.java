@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.support;
+package io.jmnarloch.spring.request.correlation.support;
 
-import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelation;
+import io.jmnarloch.spring.request.correlation.api.RequestCorrelation;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 

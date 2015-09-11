@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.api;
+package io.jmnarloch.spring.request.correlation.api;
 
 /**
  * Request id generation abstraction, allows to implement different strategies for request generation.

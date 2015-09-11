@@ -13,27 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.generator;
-
-import com.github.jmnarloch.spring.request.correletion.api.CorrelationIdGenerator;
-
-import java.util.UUID;
+package io.jmnarloch.spring.request.correlation.api;
 
 /**
- * Uses {@link UUID#randomUUID()} for generating new requests ids.
+ * An interceptor that can be used for
  *
  * @author Jakub Narloch
  */
-public class UuidGenerator implements CorrelationIdGenerator {
+public interface RequestCorrelationInterceptor {
 
     /**
-     * Generates new request id as random UUID.
+     * Callback method called whenever the correlation id has been assigned for the current request, no matter whether
+     * it has set from the request header value or a new id has generated for incoming request.
      *
-     * @return random uuid
+     * @param correlationId the correlation id
      */
-    @Override
-    public String generate() {
-
-        return UUID.randomUUID().toString();
-    }
+    void afterCorrelationIdSet(String correlationId);
 }

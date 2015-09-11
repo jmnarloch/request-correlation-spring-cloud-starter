@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.api;
+package io.jmnarloch.spring.request.correlation.api;
 
-import com.github.jmnarloch.spring.request.correletion.client.RestTemplateCorrelationConfiguration;
-import com.github.jmnarloch.spring.request.correletion.feign.FeignCorrelationConfiguration;
-import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationConfiguration;
+import io.jmnarloch.spring.request.correlation.client.RestTemplateCorrelationConfiguration;
+import io.jmnarloch.spring.request.correlation.feign.FeignCorrelationConfiguration;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 

@@ -13,20 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.api;
+package io.jmnarloch.spring.request.correlation.feign;
+
+import feign.Feign;
+import feign.RequestInterceptor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * An interceptor that can be used for
+ * Adds Feign's {@link RequestInterceptor} for propagating the correlation id.
  *
  * @author Jakub Narloch
  */
-public interface RequestCorrelationInterceptor {
+@Configuration
+@ConditionalOnClass(Feign.class)
+public class FeignCorrelationConfiguration {
 
-    /**
-     * Callback method called whenever the correlation id has been assigned for the current request, no matter whether
-     * it has set from the request header value or a new id has generated for incoming request.
-     *
-     * @param correlationId the correlation id
-     */
-    void afterCorrelationIdSet(String correlationId);
+    @Bean
+    public RequestInterceptor feignCorrelationInterceptor() {
+        return new FeignCorrelationInterceptor();
+    }
 }

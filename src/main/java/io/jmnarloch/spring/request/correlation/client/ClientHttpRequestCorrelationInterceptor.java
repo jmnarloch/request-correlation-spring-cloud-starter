@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.client;
+package io.jmnarloch.spring.request.correlation.client;
 
-import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationConsts;
-import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationUtils;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConsts;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationUtils;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;

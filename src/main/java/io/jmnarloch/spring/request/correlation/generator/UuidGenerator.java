@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.feign;
+package io.jmnarloch.spring.request.correlation.generator;
 
-import feign.Feign;
-import feign.RequestInterceptor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import io.jmnarloch.spring.request.correlation.api.CorrelationIdGenerator;
+
+import java.util.UUID;
 
 /**
- * Adds Feign's {@link RequestInterceptor} for propagating the correlation id.
+ * Uses {@link UUID#randomUUID()} for generating new requests ids.
  *
  * @author Jakub Narloch
  */
-@Configuration
-@ConditionalOnClass(Feign.class)
-public class FeignCorrelationConfiguration {
+public class UuidGenerator implements CorrelationIdGenerator {
 
-    @Bean
-    public RequestInterceptor feignCorrelationInterceptor() {
-        return new FeignCorrelationInterceptor();
+    /**
+     * Generates new request id as random UUID.
+     *
+     * @return random uuid
+     */
+    @Override
+    public String generate() {
+
+        return UUID.randomUUID().toString();
     }
 }

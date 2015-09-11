@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.support;
+package io.jmnarloch.spring.request.correlation.support;
 
-import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelationInterceptor;
-import com.github.jmnarloch.spring.request.correletion.api.CorrelationIdGenerator;
-import com.github.jmnarloch.spring.request.correletion.filter.RequestCorrelationFilter;
-import com.github.jmnarloch.spring.request.correletion.generator.UuidGenerator;
+import io.jmnarloch.spring.request.correlation.api.CorrelationIdGenerator;
+import io.jmnarloch.spring.request.correlation.api.RequestCorrelationInterceptor;
+import io.jmnarloch.spring.request.correlation.filter.RequestCorrelationFilter;
+import io.jmnarloch.spring.request.correlation.generator.UuidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;

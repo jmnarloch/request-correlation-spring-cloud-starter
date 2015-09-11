@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.filter;
+package io.jmnarloch.spring.request.correlation.filter;
 
-import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelation;
-import com.github.jmnarloch.spring.request.correletion.api.RequestCorrelationInterceptor;
-import com.github.jmnarloch.spring.request.correletion.api.CorrelationIdGenerator;
-import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationConsts;
+import io.jmnarloch.spring.request.correlation.api.CorrelationIdGenerator;
+import io.jmnarloch.spring.request.correlation.api.RequestCorrelation;
+import io.jmnarloch.spring.request.correlation.api.RequestCorrelationInterceptor;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConsts;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

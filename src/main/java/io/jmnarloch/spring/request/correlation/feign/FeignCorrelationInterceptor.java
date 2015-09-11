@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.feign;
+package io.jmnarloch.spring.request.correlation.feign;
 
-import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationConsts;
-import com.github.jmnarloch.spring.request.correletion.support.RequestCorrelationUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConsts;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationUtils;
 
 /**
  * Feign request correlation interceptor.

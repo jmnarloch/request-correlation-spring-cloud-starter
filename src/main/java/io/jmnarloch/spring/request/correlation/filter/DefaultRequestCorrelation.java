@@ -13,22 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.support;
+package io.jmnarloch.spring.request.correlation.filter;
+
+import io.jmnarloch.spring.request.correlation.api.RequestCorrelation;
 
 /**
- * Lists the constants used by this component.
+ * Base implementation of {@link RequestCorrelation}.
  *
  * @author Jakub Narloch
  */
-public interface RequestCorrelationConsts {
+public final class DefaultRequestCorrelation implements RequestCorrelation {
 
     /**
-     * The request correlation header name.
+     * The actual request correlation id.
      */
-    String HEADER_NAME = "X-Request-Id";
+    private final String id;
 
     /**
-     * The request attribute name.
+     * Creates new instance of {@link DefaultRequestCorrelation} class.
+     *
+     * @param id the request id
      */
-    String ATTRIBUTE_NAME = "com.github.jmnarloch.spring.request.correletion.api.RequestCorrelation.ATTRIBUTE";
+    public DefaultRequestCorrelation(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Retrieves the request identifier.
+     *
+     * @return the request identifier
+     */
+    @Override
+    public String getRequestId() {
+        return id;
+    }
 }
