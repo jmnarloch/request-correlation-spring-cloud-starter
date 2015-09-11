@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.support;
+package io.jmnarloch.spring.request.correlation.support;
 
-import com.github.jmnarloch.spring.request.correletion.filter.DefaultRequestCorrelation;
+import io.jmnarloch.spring.request.correlation.filter.DefaultRequestCorrelation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

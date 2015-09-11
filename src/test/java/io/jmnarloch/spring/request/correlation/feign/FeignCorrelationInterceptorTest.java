@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.filter;
+package io.jmnarloch.spring.request.correlation.feign;
 
 /**
- * Tests the {@link RequestCorrelationFilter} class.
+ * Tests the {@link FeignCorrelationInterceptor} class.
  *
  * @author Jakub Narloch
  */
-public class RequestCorrelationFilterTest {
+public class FeignCorrelationInterceptorTest {
 
 }

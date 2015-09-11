@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion;
+package io.jmnarloch.spring.request.correlation;
 
-import com.github.jmnarloch.spring.request.correletion.api.EnableRequestCorrelation;
 import com.netflix.loadbalancer.BaseLoadBalancer;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
+import io.jmnarloch.spring.request.correlation.api.EnableRequestCorrelation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

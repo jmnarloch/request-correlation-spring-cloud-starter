@@ -35,7 +35,7 @@ import java.util.List;
  * Configures the request correlation filter.
  *
  * @author Jakub Narloch
- * @see com.github.jmnarloch.spring.request.correletion.api.EnableRequestCorrelation
+ * @see io.jmnarloch.spring.request.correlation.api.EnableRequestCorrelation
  */
 @Configuration
 public class RequestCorrelationConfiguration {

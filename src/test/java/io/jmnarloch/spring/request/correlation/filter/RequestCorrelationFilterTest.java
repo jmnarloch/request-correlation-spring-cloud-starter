@@ -13,27 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.jmnarloch.spring.request.correletion.generator;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertNotNull;
+package io.jmnarloch.spring.request.correlation.filter;
 
 /**
- * Tests the {@link UuidGenerator} class.
+ * Tests the {@link RequestCorrelationFilter} class.
  *
  * @author Jakub Narloch
  */
-public class UuidGeneratorTest {
-
-    @Test
-    public void shouldGenerateId() {
-
-        // when
-        final String requestId = new UuidGenerator().generate();
-
-        // then
-        assertNotNull(requestId);
-    }
+public class RequestCorrelationFilterTest {
 
 }
