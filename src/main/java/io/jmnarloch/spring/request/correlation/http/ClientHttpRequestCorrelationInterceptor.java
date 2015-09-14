@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.jmnarloch.spring.request.correlation.client;
+package io.jmnarloch.spring.request.correlation.http;
 
 import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConsts;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationProperties;
 import io.jmnarloch.spring.request.correlation.support.RequestCorrelationUtils;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
 
@@ -32,6 +34,26 @@ import java.io.IOException;
  */
 public class ClientHttpRequestCorrelationInterceptor implements ClientHttpRequestInterceptor {
 
+    /**
+     * The correlation properties.
+     */
+    private final RequestCorrelationProperties properties;
+
+    /**
+     * Creates new instance of {@link ClientHttpRequestCorrelationInterceptor}.
+     *
+     * @param properties the properties
+     * @throws IllegalArgumentException if {@code properties} is {@code null}
+     */
+    public ClientHttpRequestCorrelationInterceptor(RequestCorrelationProperties properties) {
+        Assert.notNull(properties, "Parameter 'properties' can not be null");
+
+        this.properties = properties;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
 

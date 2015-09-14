@@ -16,7 +16,7 @@
 package io.jmnarloch.spring.request.correlation.api;
 
 /**
- * Request id generation abstraction, allows to implement different strategies for request generation.
+ * Request id generation abstraction, allows to implement different strategies for request id generation.
  *
  * @author Jakub Narloch
  */

@@ -19,6 +19,7 @@ import io.jmnarloch.spring.request.correlation.api.CorrelationIdGenerator;
 import io.jmnarloch.spring.request.correlation.api.RequestCorrelation;
 import io.jmnarloch.spring.request.correlation.api.RequestCorrelationInterceptor;
 import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConsts;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,11 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * The entry point for the request correlation. This filter intercepts any incoming request and in case that it
+ * does not contain the correlation header creates new identifier and stores it both as the request header
+ * and also as a attribute.
  *
+ * @author Jakub Narloch
  */
 public class RequestCorrelationFilter implements Filter {
 
@@ -53,19 +58,29 @@ public class RequestCorrelationFilter implements Filter {
     private final List<RequestCorrelationInterceptor> interceptors;
 
     /**
+     * The request correlation properties.
+     */
+    private final RequestCorrelationProperties properties;
+
+    /**
      * Creates new instance of {@link CorrelationIdGenerator} class.
      *
      * @param correlationIdGenerator the request id generator
-     * @param interceptors       the correlation interceptors
+     * @param interceptors           the correlation interceptors
+     * @param properties the request properties
      * @throws IllegalArgumentException if {@code requestIdGenerator} is {@code null}
      *                                  or {@code interceptors} is {@code null}
+     *                                  or {@code properties} is {@code null}
      */
-    public RequestCorrelationFilter(CorrelationIdGenerator correlationIdGenerator, List<RequestCorrelationInterceptor> interceptors) {
+    public RequestCorrelationFilter(CorrelationIdGenerator correlationIdGenerator,
+                                    List<RequestCorrelationInterceptor> interceptors, RequestCorrelationProperties properties) {
         Assert.notNull(correlationIdGenerator, "Parameter 'correlationIdGenerator' can not be null.");
         Assert.notNull(interceptors, "Parameter 'interceptors' can not be null.");
+        Assert.notNull(properties, "Parameter 'properties' can not be null.");
 
         this.correlationIdGenerator = correlationIdGenerator;
         this.interceptors = interceptors;
+        this.properties = properties;
     }
 
     /**
@@ -139,7 +154,7 @@ public class RequestCorrelationFilter implements Filter {
      */
     private String getCorrelationId(HttpServletRequest request) {
 
-        return request.getHeader(RequestCorrelationConsts.HEADER_NAME);
+        return request.getHeader(properties.getHeaderName());
     }
 
     /**
@@ -175,7 +190,7 @@ public class RequestCorrelationFilter implements Filter {
 
         final CorrelatedServletRequest req = new CorrelatedServletRequest(request);
         req.setAttribute(RequestCorrelationConsts.ATTRIBUTE_NAME, correlationId);
-        req.setHeader(RequestCorrelationConsts.HEADER_NAME, correlationId.getRequestId());
+        req.setHeader(properties.getHeaderName(), correlationId.getRequestId());
         return req;
     }
 

@@ -22,6 +22,7 @@ import io.jmnarloch.spring.request.correlation.generator.UuidGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -38,10 +39,16 @@ import java.util.List;
  * @see io.jmnarloch.spring.request.correlation.api.EnableRequestCorrelation
  */
 @Configuration
+@EnableConfigurationProperties
 public class RequestCorrelationConfiguration {
 
     @Autowired(required = false)
     private List<RequestCorrelationInterceptor> interceptors = new ArrayList<>();
+
+    @Bean
+    public RequestCorrelationProperties requestCorrelationProperties() {
+        return new RequestCorrelationProperties();
+    }
 
     @Bean
     @ConditionalOnMissingBean(CorrelationIdGenerator.class)
@@ -50,9 +57,9 @@ public class RequestCorrelationConfiguration {
     }
 
     @Bean
-    public RequestCorrelationFilter requestCorrelationFilter(CorrelationIdGenerator generator) {
+    public RequestCorrelationFilter requestCorrelationFilter(CorrelationIdGenerator generator, RequestCorrelationProperties properties) {
 
-        return new RequestCorrelationFilter(generator, interceptors);
+        return new RequestCorrelationFilter(generator, interceptors, properties);
     }
 
     @Bean

@@ -13,38 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.jmnarloch.spring.request.correlation.feign;
+package io.jmnarloch.spring.request.correlation.http;
 
-import feign.RequestTemplate;
 import io.jmnarloch.spring.request.correlation.CorrelationTestUtils;
 import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConsts;
 import io.jmnarloch.spring.request.correlation.support.RequestCorrelationProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.io.IOException;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
- * Tests the {@link FeignCorrelationInterceptor} class.
+ * Tests the {@link ClientHttpRequestCorrelationInterceptor} class.
  *
  * @author Jakub Narloch
  */
-public class FeignCorrelationInterceptorTest {
+public class ClientHttpRequestCorrelationInterceptorTest {
 
-    private FeignCorrelationInterceptor instance;
+    private ClientHttpRequestCorrelationInterceptor instance;
 
     @Before
     public void setUp() throws Exception {
+        instance = new ClientHttpRequestCorrelationInterceptor(new RequestCorrelationProperties());
 
-        instance = new FeignCorrelationInterceptor(new RequestCorrelationProperties());
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
     }
 
@@ -55,33 +57,42 @@ public class FeignCorrelationInterceptorTest {
     }
 
     @Test
-    public void shouldSetHeader() {
+    public void shouldSetHeader() throws IOException {
 
         // given
         final String requestId = UUID.randomUUID().toString();
         CorrelationTestUtils.setRequestId(requestId);
-        final RequestTemplate request = new RequestTemplate();
+
+        final HttpRequest request = mock(HttpRequest.class);
+        final ClientHttpRequestExecution execution = mock(ClientHttpRequestExecution.class);
+        final byte[] body = new byte[0];
+
+        when(request.getHeaders()).thenReturn(new HttpHeaders());
 
         // when
-        instance.apply(request);
+        instance.intercept(request, body, execution);
 
         // then
-        assertTrue(request.headers().containsKey(RequestCorrelationConsts.HEADER_NAME));
-        assertEquals(1, request.headers().get(RequestCorrelationConsts.HEADER_NAME).size());
-        assertEquals(requestId, request.headers().get(RequestCorrelationConsts.HEADER_NAME).iterator().next());
+        assertTrue(request.getHeaders().containsKey(RequestCorrelationConsts.HEADER_NAME));
+        assertEquals(requestId, request.getHeaders().getFirst(RequestCorrelationConsts.HEADER_NAME));
+        verify(execution).execute(request, body);
     }
 
     @Test
-    public void shouldNotSetHeader() {
+    public void shouldNotSetHeader() throws IOException {
 
         // given
-        final RequestTemplate request = new RequestTemplate();
+        final HttpRequest request = mock(HttpRequest.class);
+        final ClientHttpRequestExecution execution = mock(ClientHttpRequestExecution.class);
+        final byte[] body = new byte[0];
+
+        when(request.getHeaders()).thenReturn(new HttpHeaders());
 
         // when
-        instance.apply(request);
+        instance.intercept(request, body, execution);
 
         // then
-        assertFalse(request.headers().containsKey(RequestCorrelationConsts.HEADER_NAME));
+        assertFalse(request.getHeaders().containsKey(RequestCorrelationConsts.HEADER_NAME));
+        verify(execution).execute(request, body);
     }
-
 }

@@ -17,7 +17,9 @@ package io.jmnarloch.spring.request.correlation.feign;
 
 import feign.Feign;
 import feign.RequestInterceptor;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,10 +30,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnClass(Feign.class)
+@ConditionalOnProperty(value = "request.correlation.client.feign.enable", matchIfMissing = true)
 public class FeignCorrelationConfiguration {
 
     @Bean
-    public RequestInterceptor feignCorrelationInterceptor() {
-        return new FeignCorrelationInterceptor();
+    public RequestInterceptor feignCorrelationInterceptor(RequestCorrelationProperties properties) {
+        return new FeignCorrelationInterceptor(properties);
     }
 }

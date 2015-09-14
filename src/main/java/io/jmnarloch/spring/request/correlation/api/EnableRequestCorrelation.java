@@ -15,7 +15,7 @@
  */
 package io.jmnarloch.spring.request.correlation.api;
 
-import io.jmnarloch.spring.request.correlation.client.RestTemplateCorrelationConfiguration;
+import io.jmnarloch.spring.request.correlation.http.ClientHttpCorrelationConfiguration;
 import io.jmnarloch.spring.request.correlation.feign.FeignCorrelationConfiguration;
 import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConfiguration;
 import org.springframework.context.annotation.Import;
@@ -42,7 +42,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Import({
         RequestCorrelationConfiguration.class,
-        RestTemplateCorrelationConfiguration.class,
+        ClientHttpCorrelationConfiguration.class,
         FeignCorrelationConfiguration.class
 })
 public @interface EnableRequestCorrelation {

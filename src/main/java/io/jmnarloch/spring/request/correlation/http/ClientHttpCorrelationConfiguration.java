@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.jmnarloch.spring.request.correlation.client;
+package io.jmnarloch.spring.request.correlation.http;
 
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationProperties;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -33,13 +35,14 @@ import java.util.List;
  */
 @Configuration
 @ConditionalOnClass(InterceptingHttpAccessor.class)
-public class RestTemplateCorrelationConfiguration {
+@ConditionalOnProperty(value = "request.correlation.client.http.enable", matchIfMissing = true)
+public class ClientHttpCorrelationConfiguration {
 
     @Autowired(required = false)
     private List<InterceptingHttpAccessor> clients = new ArrayList<>();
 
     @Bean
-    public InitializingBean clientsCorrelationInitializer() {
+    public InitializingBean clientsCorrelationInitializer(final RequestCorrelationProperties properties) {
 
         return new InitializingBean() {
             @Override
@@ -48,7 +51,7 @@ public class RestTemplateCorrelationConfiguration {
                 if(clients != null) {
                     for(InterceptingHttpAccessor client : clients) {
                         final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>(client.getInterceptors());
-                        interceptors.add(new ClientHttpRequestCorrelationInterceptor());
+                        interceptors.add(new ClientHttpRequestCorrelationInterceptor(properties));
                         client.setInterceptors(interceptors);
                     }
                 }

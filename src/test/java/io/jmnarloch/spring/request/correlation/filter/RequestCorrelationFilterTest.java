@@ -15,6 +15,28 @@
  */
 package io.jmnarloch.spring.request.correlation.filter;
 
+import io.jmnarloch.spring.request.correlation.api.CorrelationIdGenerator;
+import io.jmnarloch.spring.request.correlation.api.RequestCorrelation;
+import io.jmnarloch.spring.request.correlation.api.RequestCorrelationInterceptor;
+import io.jmnarloch.spring.request.correlation.generator.UuidGenerator;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConsts;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationProperties;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.mock.web.MockFilterChain;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Tests the {@link RequestCorrelationFilter} class.
  *
@@ -22,4 +44,83 @@ package io.jmnarloch.spring.request.correlation.filter;
  */
 public class RequestCorrelationFilterTest {
 
+    private RequestCorrelationFilter instance;
+
+    private CorrelationIdGenerator generator = new UuidGenerator();
+
+    private List<RequestCorrelationInterceptor> interceptors = new ArrayList<>();
+
+    private RequestCorrelationProperties properties = new RequestCorrelationProperties();
+
+    @Before
+    public void setUp() throws Exception {
+
+        instance = new RequestCorrelationFilter(generator, interceptors, properties);
+    }
+
+    @Test
+    public void shouldInitiateCorrelationId() throws IOException, ServletException {
+
+        // given
+        final MockHttpServletRequest request = new MockHttpServletRequest();
+        final MockHttpServletResponse response = new MockHttpServletResponse();
+        final MockFilterChain chain = new MockFilterChain();
+
+        // when
+        instance.doFilter(request, response, chain);
+
+        // then
+        assertNotNull(request.getAttribute(RequestCorrelationConsts.ATTRIBUTE_NAME));
+        assertNotNull(((HttpServletRequest)chain.getRequest()).getHeader(RequestCorrelationConsts.HEADER_NAME));
+    }
+
+    @Test
+    public void shouldUseExistingCorrelationId() throws IOException, ServletException {
+
+        // given
+        final String requestId = UUID.randomUUID().toString();
+        final MockHttpServletRequest request = new MockHttpServletRequest();
+        final MockHttpServletResponse response = new MockHttpServletResponse();
+        final MockFilterChain chain = new MockFilterChain();
+
+        request.addHeader(RequestCorrelationConsts.HEADER_NAME, requestId);
+
+        // when
+        instance.doFilter(request, response, chain);
+
+        // then
+        final Object requestCorrelation = request.getAttribute(RequestCorrelationConsts.ATTRIBUTE_NAME);
+        assertNotNull(requestCorrelation);
+        assertEquals(requestId, ((RequestCorrelation) requestCorrelation).getRequestId());
+
+        final String header = ((HttpServletRequest) chain.getRequest()).getHeader(RequestCorrelationConsts.HEADER_NAME);
+        assertNotNull(header);
+        assertEquals(requestId, header);
+    }
+
+    @Test
+    public void shouldUseCustomHeader() throws IOException, ServletException {
+
+        // given
+        final String headerName = "X-TraceId";
+        final String requestId = UUID.randomUUID().toString();
+        final MockHttpServletRequest request = new MockHttpServletRequest();
+        final MockHttpServletResponse response = new MockHttpServletResponse();
+        final MockFilterChain chain = new MockFilterChain();
+
+        request.addHeader(headerName, requestId);
+        properties.setHeaderName(headerName);
+
+        // when
+        instance.doFilter(request, response, chain);
+
+        // then
+        final Object requestCorrelation = request.getAttribute(RequestCorrelationConsts.ATTRIBUTE_NAME);
+        assertNotNull(requestCorrelation);
+        assertEquals(requestId, ((RequestCorrelation) requestCorrelation).getRequestId());
+
+        final String header = ((HttpServletRequest) chain.getRequest()).getHeader(headerName);
+        assertNotNull(header);
+        assertEquals(requestId, header);
+    }
 }

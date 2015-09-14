@@ -18,7 +18,9 @@ package io.jmnarloch.spring.request.correlation.feign;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import io.jmnarloch.spring.request.correlation.support.RequestCorrelationConsts;
+import io.jmnarloch.spring.request.correlation.support.RequestCorrelationProperties;
 import io.jmnarloch.spring.request.correlation.support.RequestCorrelationUtils;
+import org.springframework.util.Assert;
 
 /**
  * Feign request correlation interceptor.
@@ -27,6 +29,27 @@ import io.jmnarloch.spring.request.correlation.support.RequestCorrelationUtils;
  */
 public class FeignCorrelationInterceptor implements RequestInterceptor {
 
+    /**
+     * The correlation properties.
+     */
+    private final RequestCorrelationProperties properties;
+
+    /**
+     * Creates new instance of {@link FeignCorrelationInterceptor}.
+     *
+     * @param properties the correlation properties
+     *
+     * @throws IllegalArgumentException if {@code properties} is {@code null}
+     */
+    public FeignCorrelationInterceptor(RequestCorrelationProperties properties) {
+        Assert.notNull(properties, "Parameter 'properties' can not be null");
+
+        this.properties = properties;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void apply(RequestTemplate template) {
 
