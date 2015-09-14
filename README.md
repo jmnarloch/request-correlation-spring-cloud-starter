@@ -32,6 +32,16 @@ public class Application {
 }
 ```
 
+## Properties
+
+You can configure fallowing options:
+
+```
+request.correlation.header-name=X-Request-Id # sets the header name to be used for request identification (X-Request-Id by default)
+request.correlation.client.http.enable=true  # enables the RestTemplate header propagation (true by default)
+request.correlation.client.feign.enable=true # enables the Fegin header propagation (true by default)
+```
+
 ## How it works?
 
 The annotation will auto register servlet filter that will process any inbound request and correlate it with

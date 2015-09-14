@@ -1,4 +1,3 @@
 request.correlation.header-name=X-Request-Id
-request.correlation.client.header-name=X-Request-Id
 request.correlation.client.http.enable=true
 request.correlation.client.feign.enable=true
