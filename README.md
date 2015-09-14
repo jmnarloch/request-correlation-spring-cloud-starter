@@ -65,7 +65,10 @@ Besides that you will also have transparent integration with fallowing:
 The extension itself simply gives you means to propagate the information. How you going to use it is up to you.
 
 For instance you can apply this information to your logging MDC map. You can achieve that by registering 
-`RequestCorrelationInterceptor` bean.
+`RequestCorrelationInterceptor` bean. The `RequestCorrelationInterceptor` gives you only an entry point so that
+any fallowing operation would be able to access the correlation identifier. You may also use Spring's
+[HandlerInterceptor](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/HandlerInterceptor.html)
+and set the value there.
 
 ```java
 @Bean
