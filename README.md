@@ -38,8 +38,8 @@ You can configure fallowing options:
 
 ```
 request.correlation.header-name=X-Request-Id # sets the header name to be used for request identification (X-Request-Id by default)
-request.correlation.client.http.enable=true  # enables the RestTemplate header propagation (true by default)
-request.correlation.client.feign.enable=true # enables the Fegin header propagation (true by default)
+request.correlation.client.http.enabled=true  # enables the RestTemplate header propagation (true by default)
+request.correlation.client.feign.enabled=true # enables the Fegin header propagation (true by default)
 ```
 
 ## How it works?
@@ -97,6 +97,10 @@ public ResponseEntity error(Exception ex) {
 ```
 
 Another use case is to save that with your Spring Boot Actuator's audits when you implement custom `AuditEventRepository`.
+
+## Migrating to 1.1
+
+The properties enable has been renamed to enabled to match the Spring convention, besides that there are active by default
 
 ## License
 

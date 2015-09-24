@@ -35,7 +35,7 @@ import java.util.List;
  */
 @Configuration
 @ConditionalOnClass(InterceptingHttpAccessor.class)
-@ConditionalOnProperty(value = "request.correlation.client.http.enable", matchIfMissing = true)
+@ConditionalOnProperty(value = "request.correlation.client.http.enabled", matchIfMissing = true)
 public class ClientHttpCorrelationConfiguration {
 
     @Autowired(required = false)

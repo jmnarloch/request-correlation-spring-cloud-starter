@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnClass(Feign.class)
-@ConditionalOnProperty(value = "request.correlation.client.feign.enable", matchIfMissing = true)
+@ConditionalOnProperty(value = "request.correlation.client.feign.enabled", matchIfMissing = true)
 public class FeignCorrelationConfiguration {
 
     @Bean
