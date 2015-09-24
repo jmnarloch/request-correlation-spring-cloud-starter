@@ -16,7 +16,7 @@ Add the Spring Cloud starter to your project:
 <dependency>
   <groupId>io.jmnarloch</groupId>
   <artifactId>request-correlation-spring-cloud-starter</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
