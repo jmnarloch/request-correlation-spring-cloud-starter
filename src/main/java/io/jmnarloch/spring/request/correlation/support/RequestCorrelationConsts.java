@@ -30,5 +30,5 @@ public interface RequestCorrelationConsts {
     /**
      * The request attribute name.
      */
-    String ATTRIBUTE_NAME = "com.github.jmnarloch.spring.request.correlation.api.RequestCorrelation.ATTRIBUTE";
+    String ATTRIBUTE_NAME = "io.jmnarloch.spring.request.correlation.api.RequestCorrelation.ATTRIBUTE";
 }
