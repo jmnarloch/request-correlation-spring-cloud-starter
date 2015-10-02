@@ -23,10 +23,17 @@ package io.jmnarloch.spring.request.correlation.api;
 public interface RequestCorrelationInterceptor {
 
     /**
-     * Callback method called whenever the correlation id has been assigned for the current request, no matter whether
-     * it has set from the request header value or a new id has generated for incoming request.
+     * Callback method called whenever the correlation id has been assigned for the current request. No matter whether
+     * it has set from the request header or a new id has been generated for incoming request.
      *
      * @param correlationId the correlation id
      */
     void afterCorrelationIdSet(String correlationId);
+
+    /**
+     * Callback method called after filter chain has completed.
+     *
+     * @param correlationId the correlation id
+     */
+    void cleanUp(String correlationId);
 }

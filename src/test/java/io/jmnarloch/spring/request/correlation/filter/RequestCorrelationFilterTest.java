@@ -36,6 +36,8 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * Tests the {@link RequestCorrelationFilter} class.
@@ -122,5 +124,30 @@ public class RequestCorrelationFilterTest {
         final String header = ((HttpServletRequest) chain.getRequest()).getHeader(headerName);
         assertNotNull(header);
         assertEquals(requestId, header);
+    }
+
+    @Test
+    public void shouldInvokeInterceptor() throws IOException, ServletException {
+
+        // given
+        final MockHttpServletRequest request = new MockHttpServletRequest();
+        final MockHttpServletResponse response = new MockHttpServletResponse();
+        final MockFilterChain chain = new MockFilterChain();
+
+        final RequestCorrelationInterceptor interceptor = mock(RequestCorrelationInterceptor.class);
+        interceptors.add(interceptor);
+
+        // when
+        instance.doFilter(request, response, chain);
+
+        // then
+        final String requestId = ((HttpServletRequest) chain.getRequest()).getHeader(RequestCorrelationConsts.HEADER_NAME);
+        final RequestCorrelation correlationId = (RequestCorrelation) request.getAttribute(RequestCorrelationConsts.ATTRIBUTE_NAME);
+        assertNotNull(requestId);
+        assertNotNull(correlationId);
+        assertEquals(requestId, correlationId.getRequestId());
+
+        verify(interceptor).afterCorrelationIdSet(requestId);
+        verify(interceptor).cleanUp(requestId);
     }
 }

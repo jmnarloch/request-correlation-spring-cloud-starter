@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * and also as a attribute.
  *
  * @author Jakub Narloch
+ * @author Souris Stathis
  */
 public class RequestCorrelationFilter implements Filter {
 
@@ -142,8 +143,12 @@ public class RequestCorrelationFilter implements Filter {
         // populates the attribute
         final ServletRequest req = enrichRequest(request, requestCorrelation);
 
-        // proceeds with execution
-        chain.doFilter(req, response);
+        try {
+            // proceeds with execution
+            chain.doFilter(req, response);
+        } finally {
+            triggerInterceptorsCleanup(correlationId);
+        }
     }
 
     /**
@@ -176,6 +181,18 @@ public class RequestCorrelationFilter implements Filter {
 
         for (RequestCorrelationInterceptor interceptor : interceptors) {
             interceptor.afterCorrelationIdSet(correlationId);
+        }
+    }
+
+    /**
+     * Triggers the configured interceptors cleanUp methods.
+     *
+     * @param correlationId the correlation id
+     */
+    private void triggerInterceptorsCleanup(String correlationId) {
+
+        for (RequestCorrelationInterceptor interceptor : interceptors) {
+            interceptor.cleanUp(correlationId);
         }
     }
 
