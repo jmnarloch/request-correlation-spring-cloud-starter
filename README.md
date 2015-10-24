@@ -3,6 +3,7 @@
 > A Spring Cloud starter for easy setup request correlation
 
 [![Build Status](https://travis-ci.org/jmnarloch/request-correlation-spring-cloud-starter.svg?branch=master)](https://travis-ci.org/jmnarloch/request-correlation-spring-cloud-starter)
+[![Coverage Status](https://coveralls.io/repos/jmnarloch/request-correlation-spring-cloud-starter/badge.svg?branch=master&service=github)](https://coveralls.io/github/jmnarloch/request-correlation-spring-cloud-starter?branch=master)
 
 ## Features
 
