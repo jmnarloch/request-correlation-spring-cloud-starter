@@ -35,7 +35,7 @@ public class Application {
 
 ## Properties
 
-You can configure fallowing options:
+You can configure following options:
 
 ```
 request.correlation.header-name=X-Request-Id # sets the header name to be used for request identification (X-Request-Id by default)
